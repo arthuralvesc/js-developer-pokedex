@@ -1,5 +1,8 @@
 const pokemonList = document.getElementById('pokemonList')
 const loadMoreButton = document.getElementById('loadMoreButton')
+const overlay = document.getElementById('overlay')
+const selectedPokemonCard = document.getElementById('selectedPokemonCard')
+const closeCardButton = document.getElementById('closeCardButton')
 
 const maxRecords = 151
 const limit = 10
@@ -44,4 +47,21 @@ loadMoreButton.addEventListener('click', () => {
     } else {
         loadPokemonItens(offset, limit)
     }
+})
+
+pokemonList.addEventListener('click', function(event) {
+    const li = event.target.closest('li.pokemon');
+    if (li) {
+        const selectedPokemonElement = li.querySelector('.name');
+        const selectedPokemonName = selectedPokemonElement.textContent.replace('#', '');
+        pokeApi.getSelectedPokemon(selectedPokemonName)
+            .then(pokemonCardHtml => {
+                selectedPokemonCard.innerHTML = pokemonCardHtml;
+                overlay.classList.add('active')
+            });
+    }
+});
+
+closeCardButton.addEventListener('click', function(event){
+    overlay.classList.remove('active')
 })
